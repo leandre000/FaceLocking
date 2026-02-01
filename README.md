@@ -1,120 +1,219 @@
-# Face Recognition with Real-time Tracking
+Real-Time Face Recognition and Face Locking System
 
-A real-time face recognition system with face locking capabilities, designed to identify and track specific individuals while monitoring their actions.
+A real-time face recognition and tracking system capable of identifying multiple individuals, locking onto a selected person, and continuously monitoring facial actions. The system combines high-accuracy face recognition with facial landmark tracking and automated action logging. It is suitable for surveillance, attendance systems, behavioral analysis, and research applications.
 
-## Core Features
-- **Face Recognition**: 
-  - Real-time face detection and identification
-  - Multi-person support
-  - High accuracy with ArcFace embeddings
+FEATURES
 
-- **Face Locking**:
-  - Track specific individuals in real-time
-  - Monitor head movements (left/right)
-  - Detect smiles and facial expressions
-  - Automatic action logging with timestamps
+Face Recognition
 
-## Setup
-1. **Install Dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-2. **Models**:
-   Ensure the following models are in the `models/` directory:
-   - `embedder_arcface.onnx` (ArcFace recognition)
-   - `face_landmarker.task` (MediaPipe FaceMesh)
+Real-time face detection and identification
 
-## Usage
+Multi-face support
 
-### 1. Enrollment
-Enroll new identities by capturing face samples from the camera.
-```bash
+High-accuracy ArcFace embeddings
+
+Optimized for CPU-based real-time processing
+
+Face Locking and Tracking
+
+Lock onto a specific recognized individual during runtime
+
+Persistent tracking even when other faces appear
+
+Automatic re-acquisition if the face is briefly lost
+
+Visual indicator for the locked face
+
+Action and Expression Detection
+
+Head movement detection (left and right)
+
+Smile detection using facial landmark ratios
+
+System event detection (lock, unlock, lost, regained)
+
+Automatic timestamped logging of all actions
+
+PROJECT STRUCTURE
+
+.
+├── models/
+│ ├── embedder_arcface.onnx
+│ └── face_landmarker.task
+├── logs/
+├── src/
+│ ├── enroll.py
+│ ├── recognize.py
+│ ├── evaluate.py
+│ ├── embed.py
+│ └── haar_5pt.py
+├── requirements.txt
+└── README.txt
+
+INSTALLATION
+
+Prerequisites
+
+Python 3.8 or higher
+
+Webcam or camera device
+
+Install Dependencies
+
+pip install -r requirements.txt
+
+Model Setup
+
+Ensure the following files are placed in the models directory:
+
+embedder_arcface.onnx (ArcFace recognition model)
+
+face_landmarker.task (MediaPipe FaceMesh landmark model)
+
+USAGE
+
+Face Enrollment
+
+Capture and register face samples for new identities.
+
+Command:
 python -m src.enroll
-```
-- **Controls**:
-  - `SPACE`: Capture a single sample.
-  - `a`: Toggle auto-capture.
-  - `s`: Save enrollment to database.
-  - `q`: Quit.
 
-### 2. Recognition
-Run real-time multi-face recognition with face locking and action tracking.
-```bash
+Controls:
+
+SPACE : Capture a single face sample
+
+a : Toggle automatic capture
+
+s : Save enrollment data
+
+q : Quit enrollment
+
+Real-Time Recognition and Face Locking
+
+Run live face recognition with tracking and action logging.
+
+Command:
 python -m src.recognize
-```
-- **Controls**:
-  - `+/-`: Adjust distance threshold live.
-  - `r`: Reload database from disk.
-  - `d`: Toggle debug overlay.
-  - `l`: Lock/unlock the currently recognized face.
-  - `q`: Quit.
 
-#### Face Locking Features
-- Lock onto a specific person by pressing `l` when their face is detected
-- The system will track the locked face and log their actions
-- Actions include:
-  - Head movements (left/right)
-  - Smile detection
-  - Face locking/unlocking events
-- All actions are timestamped and saved to `logs/[Name]_history_[timestamp].txt`
+Controls:
 
-### 3. Evaluation
-Evaluate the model's performance on enrolled crops and find the optimal threshold.
-```bash
+/ - : Adjust recognition distance threshold
+
+r : Reload face database
+
+d : Toggle debug overlay
+
+l : Lock or unlock the currently recognized face
+
+q : Quit
+
+FACE LOCKING SYSTEM
+
+Lock Activation
+
+Press 'l' when a recognized face is visible
+
+The closest recognized face is locked
+
+A visual border indicates the locked individual
+
+Tracking Behavior
+
+The locked face remains tracked while visible
+
+If the face is lost, re-acquisition is attempted for 2 seconds
+
+The lock is automatically released if re-acquisition fails
+
+DETECTED ACTIONS
+
+Head Movement
+
+Detects left and right head rotation
+
+Based on horizontal landmark displacement
+
+Default movement threshold: 10 pixels (configurable)
+
+Facial Expression
+
+Smile detection using mouth landmark ratios
+
+Default smile threshold: ratio greater than 1.1
+
+System Events
+
+Face locked
+
+Face unlocked
+
+Face lost
+
+Face re-acquired
+
+LOGGING SYSTEM
+
+Log Files
+
+All logs are saved in the logs directory
+
+A new log file is created for each recognition session
+
+Filename Format
+[Name]history[timestamp].txt
+
+Example
+Bahati_history_20260131132049.txt
+
+Log Entry Format
+[YYYY-MM-DD HH:MM:SS.microseconds] - ACTION_TYPE: Description
+
+Example Log Entries
+2026-01-31 13:20:11.324267 - FACE_LOCKED: Face locked: Bahati
+2026-01-31 13:20:20.225528 - HEAD_RIGHT: Moved right by 31.9px
+2026-01-31 13:20:21.684933 - SMILE: Smile detected (ratio: 1.47)
+
+EVALUATION
+
+Evaluate recognition accuracy and determine the optimal distance threshold.
+
+Command:
 python -m src.evaluate
-```
 
-### 4. Demos
-Visualize embeddings or detection/landmarks:
-```bash
-python -m src.embed    # Embedding heatmap visualization
-python -m src.haar_5pt  # Detection and landmark visualization
-```
+VISUALIZATION AND DEBUG TOOLS
 
-## Face Locking System
+python -m src.embed
+Visualizes face embeddings
 
-### How Face Locking Works
-1. **Activation**: 
-   - Press 'l' when a recognized face is on screen
-   - The system will lock onto the closest recognized face
-   - A visual indicator (orange border) shows the locked face
+python -m src.haar_5pt
+Displays face detection and landmark tracking
 
-2. **Tracking**:
-   - The system continues to track the locked face even if other faces appear
-   - If the face is temporarily lost, the system will try to reacquire it for 2 seconds
-   - The lock is automatically released if the face is not found after this period
+TECHNICAL OVERVIEW
 
-3. **Actions Detected**:
-   - **Head Movements**:
-     - Left/Right: Tracks horizontal head rotation
-     - Movement threshold: 10 pixels (adjustable)
-   - **Facial Expressions**:
-     - Smile detection: Measures mouth corner movement
-     - Smile threshold: Ratio > 1.1 (configurable)
-   - **System Events**:
-     - Face locked/unlocked
-     - Face lost/regained
+Face Recognition Model: ArcFace (ONNX)
 
-### History Files
-- **Location**: All logs are saved in the `logs/` directory
-- **Naming Convention**: `[Name]_history_[timestamp].txt`
-  - Example: `Bahati_history_20260131132049.txt`
-- **Log Format**:
-  ```
-  [YYYY-MM-DD HH:MM:SS.microseconds] - ACTION_TYPE: Description
-  ```
-- **Example Entries**:
-  ```
-  2026-01-31 13:20:11.324267 - FACE_LOCKED: Face locked: Bahati
-  2026-01-31 13:20:20.225528 - HEAD_RIGHT: Moved right by 31.9px
-  2026-01-31 13:20:21.684933 - SMILE: Smile detected (ratio: 14.97)
-  ```
-- **Log Management**:
-  - New log file created for each recognition session
-  - Timestamp in filename helps track different usage sessions
-  - Logs are automatically created when face locking is used
+Landmark Tracking: MediaPipe FaceMesh (5-point tracking)
 
-### Technical Details
-- **Face Recognition**: Uses ArcFace for generating unique face embeddings
-- **Landmark Tracking**: MediaPipe FaceMesh tracks 5 key facial points
-- **Performance**: Optimized for real-time processing on CPU
+Tracking Method: Bounding box and landmark continuity
+
+Performance: Real-time, CPU-optimized
+
+Logging: Automatic session-based event history
+
+USE CASES
+
+Attendance and identity verification
+
+Surveillance and access control
+
+Behavioral and motion analysis
+
+Academic and research projects
+
+Human-computer interaction systems
+
+LICENSE
+
+This project is intended for educational and research purposes.
+Add a license file if distribution or commercialization is planned.
