@@ -1,4 +1,4 @@
-# 🔒 Face Locking System
+# Face Locking System
 
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
 ![OpenCV](https://img.shields.io/badge/OpenCV-Computer%20Vision-green)
@@ -7,38 +7,18 @@
 
 A high-performance **Real-time Face Recognition and Locking System** designed to identify enrolled individuals, track their movements, and log their actions with precision. Built with ArcFace for state-of-the-art recognition accuracy and MediaPipe for robust landmark tracking.
 
-## 🌟 Core Features
+## Core Features
 
-- **🎯 Real-Time Face Recognition**: Identify multiple individuals simultaneously with high accuracy using ArcFace embeddings.
-- **🔐 Face Locking**: Securely "lock" onto a specific target to track them exclusively, ignoring other faces.
-- **👀 Action Monitoring**:
+- **Real-Time Face Recognition**: Identify multiple individuals simultaneously with high accuracy using ArcFace embeddings.
+- **Face Locking**: Securely "lock" onto a specific target to track them exclusively, ignoring other faces.
+- **Action Monitoring**:
     - **Head Tracking**: Detects and logs left/right head movements.
     - **Expression Analysis**: Real-time smile detection.
     - **Activity Logging**: Timestamps every event (lock, unlock, movement, smile) to a persistent log file.
-- **⚡ High Performance**: Optimized for CPU inference, suitable for laptops and edge devices.
-- **📊 Analytics**: Built-in tools for evaluating model thresholds and visualizing embeddings.
+- **High Performance**: Optimized for CPU inference, suitable for laptops and edge devices.
+- **Analytics**: Built-in tools for evaluating model thresholds and visualizing embeddings.
 
-## 📂 Project Structure
-
-```
-face-locking/
-├── models/                  # Required model files (ArcFace ONNX, FaceMesh task)
-├── src/
-│   ├── align.py             # Face alignment using 5-point landmarks
-│   ├── camera.py            # Webcam stream handling
-│   ├── detect.py            # Face detection logic
-│   ├── embed.py             # Feature extraction (ArcFace)
-│   ├── enroll.py            # CLI tool for registering new users
-│   ├── evaluate.py          # Script to find optimal recognition thresholds
-│   ├── haar_5pt.py          # Visualization demo for landmarks
-│   ├── landmarks.py         # MediaPipe FaceMesh wrapper
-│   └── recognize.py         # Main application: Recognition & Locking
-├── logs/                    # Session logs saved here
-├── requirements.txt         # Python dependencies
-└── README.md                # Project documentation
-```
-
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -64,7 +44,7 @@ face-locking/
     - `embedder_arcface.onnx`
     - `face_landmarker.task`
 
-## 📖 Usage
+## Usage
 
 ### 1. Enroll New Users
 Before the system can recognize anyone, you must enroll them.
@@ -93,7 +73,7 @@ python -m src.recognize
 - `r`: Reload the face database from disk.
 - `q`: Quit the application.
 
-**🔒 Face Locking Mode:**
+**Face Locking Mode:**
 When you lock onto a face (press `l`), the system will:
 1.  Draw an **Orange** bounding box around the target.
 2.  Ignore all other faces.
@@ -118,7 +98,7 @@ Explore the underlying technology with these visualization scripts:
   python -m src.embed
   ```
 
-## 📝 Logs
+## Logs
 
 All tracking sessions are logged in the `logs/` directory with filenames in the format:
 `[Name]_history_[YYYYMMDDHHMMSS].txt`
@@ -130,7 +110,7 @@ All tracking sessions are logged in the `logs/` directory with filenames in the 
 2026-02-01 14:30:25.789 - SMILE: Expression detected: Smile
 ```
 
-## 🛠️ Troubleshooting
+## Troubleshooting
 
 - **"No module named 'src'"**:
   Make sure you are running the commands from the root `face-locking` directory using `python -m src.script_name`.
@@ -143,6 +123,6 @@ All tracking sessions are logged in the `logs/` directory with filenames in the 
   - Enroll multiple angles of the face.
   - Run `src.evaluate` to tune the threshold.
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
